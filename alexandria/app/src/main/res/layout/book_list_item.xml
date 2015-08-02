@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="120dp"
+    app:cardUseCompatPadding="true">
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:padding="6dip">
+
+    <ImageView
+        android:id="@+id/fullBookCover"
+        android:layout_width="80dp"
+        android:layout_height="match_parent"
+        android:layout_marginRight="16dp"
+        android:scaleType="centerCrop"
+        android:contentDescription="@string/book_cover"/>
+
+    <TextView
+        android:id="@+id/listBookTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_toRightOf="@id/fullBookCover"
+        android:gravity="center_vertical"
+        android:ellipsize="end"
+        android:layout_marginRight="10dp"
+        android:maxLines="1"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/listBookSubTitle"
+        android:layout_width="match_parent"
+        android:layout_height="26dip"
+        android:singleLine="true"
+        android:textSize="12sp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:layout_marginRight="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/fullBookCover"
+        android:layout_toEndOf="@+id/fullBookCover"/>
+  </RelativeLayout>
+</android.support.v7.widget.CardView>

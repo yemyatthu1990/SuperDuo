@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import it.jaschke.alexandria.data.AlexandriaContract;
 import it.jaschke.alexandria.services.BookService;
@@ -66,11 +67,14 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+      setRetainInstance(true);
         rootView = inflater.inflate(R.layout.fragment_add_book, container, false);
         ean = (EditText) rootView.findViewById(R.id.ean);
-
-        ean.addTextChangedListener(new TextWatcher() {
+      if(savedInstanceState!=null && savedInstanceState.getString(EAN_CONTENT)!=null){
+        Toast.makeText(getActivity(),savedInstanceState.getString(EAN_CONTENT),Toast.LENGTH_LONG).show();
+        ean.setText(savedInstanceState.getString(EAN_CONTENT));
+      }
+      ean.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 //no need
@@ -136,12 +140,7 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
             }
         });
 
-        if(savedInstanceState!=null){
-            ean.setText(savedInstanceState.getString(EAN_CONTENT));
-            ean.setHint("");
-        }
-
-        return rootView;
+      return rootView;
     }
 
     private void restartLoader(){

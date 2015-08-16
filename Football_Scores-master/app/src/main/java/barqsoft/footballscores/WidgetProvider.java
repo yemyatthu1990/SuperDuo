@@ -1,6 +1,7 @@
 package barqsoft.footballscores;
 
 import android.annotation.TargetApi;
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
@@ -17,13 +18,14 @@ import barqsoft.footballscores.service.myFetchService;
  */
 public class WidgetProvider extends AppWidgetProvider {
   public static final String DATA_FETCHED = "barqsoft.footballscores.WidgetProvider.DATA_FETCHED";
+  public static final String EXTRA_LIST_VIEW_ROW_NUMBER = "barqsoft.footballscores.WidgetProvider.EXTRA_LIST_VIEW_ROW_NUMBER";
 
   /**
    * this method is called every 30 mins as specified on widgetinfo.xml
    * this method is also called on every phone reboot
    **/
 
-  @Override
+  @TargetApi(Build.VERSION_CODES.HONEYCOMB) @Override
   public void onUpdate(Context context, AppWidgetManager
       appWidgetManager,int[] appWidgetIds) {
 
@@ -37,6 +39,11 @@ public class WidgetProvider extends AppWidgetProvider {
       serviceIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
       context.startService(serviceIntent);
       RemoteViews remoteViews = updateWidgetListView(context, appWidgetIds[i]);
+      Intent configIntent = new Intent(context, MainActivity.class);
+      PendingIntent configPendingIntent = PendingIntent.getActivity(context, 0, configIntent, 0);
+      remoteViews.setOnClickPendingIntent(R.id.main_widget_container, configPendingIntent);
+      PendingIntent startActivityPendingIntent = PendingIntent.getActivity(context, 0, configIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+      remoteViews.setPendingIntentTemplate(R.id.listViewWidget, startActivityPendingIntent);
       appWidgetManager.updateAppWidget(appWidgetIds[i],remoteViews);
     }
     super.onUpdate(context, appWidgetManager, appWidgetIds);

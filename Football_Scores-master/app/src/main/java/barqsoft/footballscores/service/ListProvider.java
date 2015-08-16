@@ -13,6 +13,7 @@ import android.widget.RemoteViewsService;
 import barqsoft.footballscores.DatabaseContract;
 import barqsoft.footballscores.R;
 import barqsoft.footballscores.ScoresDBHelper;
+import barqsoft.footballscores.WidgetProvider;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -73,7 +74,7 @@ public class ListProvider implements RemoteViewsService.RemoteViewsFactory {
   *we return RemoteViews
   *
   */
-  @Override
+  @TargetApi(Build.VERSION_CODES.JELLY_BEAN) @Override
   public RemoteViews getViewAt(int position) {
     final RemoteViews remoteView = new RemoteViews(
         context.getPackageName(),R.layout.widget_item_layout);
@@ -93,8 +94,11 @@ public class ListProvider implements RemoteViewsService.RemoteViewsFactory {
     }
     remoteView.setTextViewText(R.id.data_textview, date);
     remoteView.setTextViewText(R.id.home_name,home);
-    remoteView.setTextViewText(R.id.away_name,away);
-    remoteView.setTextViewText(R.id.score_textview,home_goals+" : "+away_goals);
+    remoteView.setTextViewText(R.id.away_name, away);
+    remoteView.setTextViewText(R.id.score_textview, home_goals + " : " + away_goals);
+    Intent fillInIntent = new Intent();
+    fillInIntent.putExtra(WidgetProvider.EXTRA_LIST_VIEW_ROW_NUMBER, position);
+    remoteView.setOnClickFillInIntent(R.id.widget_container, fillInIntent);
     return remoteView;
   }
 

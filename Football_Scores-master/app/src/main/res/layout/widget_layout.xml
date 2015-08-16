@@ -3,13 +3,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@android:color/black" >
-
+    android:background="@drawable/abc_dialog_material_background_light">
+    <TextView
+        android:id="@+id/widget_title"
+        style="@style/TextAppearance.AppCompat.Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/widget_title"
+        android:padding="@dimen/spacing_minor"
+        android:textColor="@android:color/white"
+        android:background="@color/primaryColorDark"/>
     <!-- ListView to be shown on widget -->
     <ListView
         android:id="@+id/listViewWidget"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:divider="@color/material_blue_grey_800"
+        android:scrollbars="vertical"
+        android:dividerHeight="1dp"/>
 
     <!-- Empty view is show if list items are empty -->
     <TextView
@@ -17,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="No data"
+        android:text="@string/no_match"
         android:textColor="#ffffff"
         android:textSize="20sp"
         android:visibility="gone" />

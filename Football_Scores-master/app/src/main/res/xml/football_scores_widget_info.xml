@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:minHeight="110dp"
-    android:minWidth="110dp"
-    android:resizeMode="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:minHeight="180dp"
+    android:minWidth="240dp"
+    android:resizeMode="vertical|horizontal"
     android:widgetCategory="home_screen"
     tools:ignore="UnusedAttribute">
 </appwidget-provider>

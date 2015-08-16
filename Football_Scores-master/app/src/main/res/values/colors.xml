@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <color name="primaryColor">#001765</color>
+    <color name="primaryColorDark">#FF001249</color>
+    <color name="accentColor">#FF00695C</color>
     <color name="blue01">#0099CC</color>
     <color name="blue02">#079DD0</color>
     <color name="blue03">#0FA1D3</color>
@@ -23,6 +26,7 @@
     <color name="purple05">#B368D9</color>
     <color name="purple06">#BA75DC</color>
     <color name="purple07">#C182E0</color>
+
     <color name="purple08">#C58BE2</color>
     <color name="purple09">#CB97E5</color>
     <color name="purple10">#CF9FE7</color>

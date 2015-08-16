@@ -3,17 +3,20 @@ package barqsoft.footballscores;
 import android.annotation.TargetApi;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.widget.RemoteViews;
 import barqsoft.footballscores.service.WidgetService;
+import barqsoft.footballscores.service.myFetchService;
 
 /**
  * Created by yemyatthu on 8/7/15.
  */
 public class WidgetProvider extends AppWidgetProvider {
+  public static final String DATA_FETCHED = "barqsoft.footballscores.WidgetProvider.DATA_FETCHED";
 
   /**
    * this method is called every 30 mins as specified on widgetinfo.xml
@@ -30,10 +33,11 @@ public class WidgetProvider extends AppWidgetProvider {
  * your homescreen*/
     final int N = appWidgetIds.length;
     for (int i = 0; i < N; ++i) {
-      RemoteViews remoteViews = updateWidgetListView(context,
-          appWidgetIds[i]);
-      appWidgetManager.updateAppWidget(appWidgetIds[i],
-          remoteViews);
+      Intent serviceIntent = new Intent(context, myFetchService.class);
+      serviceIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
+      context.startService(serviceIntent);
+      RemoteViews remoteViews = updateWidgetListView(context, appWidgetIds[i]);
+      appWidgetManager.updateAppWidget(appWidgetIds[i],remoteViews);
     }
     super.onUpdate(context, appWidgetManager, appWidgetIds);
   }
@@ -58,6 +62,21 @@ public class WidgetProvider extends AppWidgetProvider {
     //setting an empty view in case of no data
     remoteViews.setEmptyView(R.id.listViewWidget, R.id.empty_view);
     return remoteViews;
+  }
+
+  @TargetApi(Build.VERSION_CODES.HONEYCOMB) @Override
+  public void onReceive(Context context, Intent intent) {
+    super.onReceive(context, intent);
+    if (intent.getAction().equals(DATA_FETCHED)) {
+      int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
+          AppWidgetManager.INVALID_APPWIDGET_ID);
+      AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+      final ComponentName cn = new ComponentName(context,
+          WidgetProvider.class);
+      appWidgetManager.notifyAppWidgetViewDataChanged(
+          appWidgetManager.getAppWidgetIds(cn),
+          R.id.listViewWidget);
+    }
   }
 
 }

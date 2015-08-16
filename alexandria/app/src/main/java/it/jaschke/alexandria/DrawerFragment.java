@@ -17,8 +17,8 @@ import android.view.ViewGroup;
 /**
  * Created by yemyatthu on 7/28/15.
  */
-public class DrawerFragment extends Fragment implements
-    NavigationView.OnNavigationItemSelectedListener{
+public class DrawerFragment extends Fragment
+    implements NavigationView.OnNavigationItemSelectedListener {
 
   /**
    * Remember the position of the selected item.
@@ -37,64 +37,64 @@ public class DrawerFragment extends Fragment implements
   private DrawerLayout mDrawerLayout;
   private int mCurrentSelectedItemId = 0;
   private boolean mUserLearnedDrawer;
+
   @Nullable @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-    mNavigationView = (NavigationView) inflater.inflate(R.layout.fragment_drawer,container,false);
+    mNavigationView = (NavigationView) inflater.inflate(R.layout.fragment_drawer, container, false);
     mNavigationView.setNavigationItemSelectedListener(this);
-    if(savedInstanceState!=null && savedInstanceState.getInt(STATE_SELECTED_POSITION,-1)!=-1) {
+    if (savedInstanceState != null
+        && savedInstanceState.getInt(STATE_SELECTED_POSITION, -1) != -1) {
       mCurrentSelectedItemId = savedInstanceState.getInt(STATE_SELECTED_POSITION);
-    }else if(Integer.valueOf(PreferenceManager.
-        getDefaultSharedPreferences(getActivity()).getString("pref_startFragment","-1"))!=-1){
+    } else if (Integer.valueOf(PreferenceManager.
+        getDefaultSharedPreferences(getActivity()).getString("pref_startFragment", "-1")) != -1) {
       int pos = Integer.valueOf(PreferenceManager.
-          getDefaultSharedPreferences(getActivity()).getString("pref_startFragment","-1"));
+          getDefaultSharedPreferences(getActivity()).getString("pref_startFragment", "-1"));
       mCurrentSelectedItemId = mNavigationView.getMenu().getItem(pos).getItemId();
-    }
-    else {
+    } else {
       mCurrentSelectedItemId = mNavigationView.getMenu().getItem(0).getItemId();
     }
     mNavigationView.getMenu().findItem(mCurrentSelectedItemId).setChecked(true);
-    mCallbacks.onNavigationDrawerItemSelected(
-      mCurrentSelectedItemId);
+    mCallbacks.onNavigationDrawerItemSelected(mCurrentSelectedItemId);
     return mNavigationView;
   }
 
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
+  @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setRetainInstance(true);
     // Read in the flag indicating whether or not the user has demonstrated awareness of the
     // drawer. See PREF_USER_LEARNED_DRAWER for details.
     SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
     mUserLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
-
-
   }
 
-
-  public void setUp(int fragmentId, final DrawerLayout drawerLayout,@Nullable Toolbar toolbar) {
+  public void setUp(int fragmentId, final DrawerLayout drawerLayout, @Nullable Toolbar toolbar) {
 
     mFragmentContainerView = getActivity().findViewById(fragmentId);
     mDrawerLayout = drawerLayout;
     if (!mUserLearnedDrawer) {
       mDrawerLayout.openDrawer(mFragmentContainerView);
-      PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putBoolean(PREF_USER_LEARNED_DRAWER,true).apply();
+      PreferenceManager.getDefaultSharedPreferences(getActivity())
+          .edit()
+          .putBoolean(PREF_USER_LEARNED_DRAWER, true)
+          .apply();
     }
-    if(toolbar!=null){
+    if (toolbar != null) {
       toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
       toolbar.setNavigationOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View view) {
-          if(drawerLayout.isDrawerOpen(mFragmentContainerView)){
+          if (drawerLayout.isDrawerOpen(mFragmentContainerView)) {
             drawerLayout.closeDrawer(mFragmentContainerView);
-          }else{
+          } else {
             drawerLayout.openDrawer(mFragmentContainerView);
           }
         }
       });
     }
   }
+
   @Override public boolean onNavigationItemSelected(MenuItem menuItem) {
     //If the same item is selected again, do nothing
-    if(mCurrentSelectedItemId == menuItem.getItemId()){
+    if (mCurrentSelectedItemId == menuItem.getItemId()) {
       mDrawerLayout.closeDrawer(mFragmentContainerView);
       menuItem.setChecked(true);
       return false;
@@ -105,6 +105,7 @@ public class DrawerFragment extends Fragment implements
     menuItem.setChecked(true);
     return true;
   }
+
   public void onAttach(Activity activity) {
     super.onAttach(activity);
     try {
@@ -119,11 +120,11 @@ public class DrawerFragment extends Fragment implements
     outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedItemId);
   }
 
-  @Override
-  public void onDetach() {
+  @Override public void onDetach() {
     super.onDetach();
     mCallbacks = null;
   }
+
   /**
    * Callbacks interface that all activities using this fragment must implement.
    */

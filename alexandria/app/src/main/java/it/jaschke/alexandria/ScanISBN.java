@@ -17,13 +17,14 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
 /**
  * Created by yemyatthu on 7/18/15.
  */
-public class ScanISBN extends DialogFragment implements ZXingScannerView.ResultHandler{
+public class ScanISBN extends DialogFragment implements ZXingScannerView.ResultHandler {
   public static final String BARCODE_SCANNED = "barcode_scanned";
   public static final String BARCODE_DATA = "barcode_data";
   private ZXingScannerView scannerView;
+
   @Nullable @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-    View view = inflater.inflate(R.layout.activity_scan_isbn,container,false);
+    View view = inflater.inflate(R.layout.activity_scan_isbn, container, false);
     scannerView = (ZXingScannerView) view.findViewById(R.id.scanner_view);
     return view;
   }
@@ -33,12 +34,13 @@ public class ScanISBN extends DialogFragment implements ZXingScannerView.ResultH
       Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
       Ringtone r = RingtoneManager.getRingtone(getActivity().getApplicationContext(), notification);
       r.play();
-    } catch (Exception e) {}
+    } catch (Exception e) {
+    }
     Toast.makeText(getActivity(),
         "Contents = " + rawResult.getText() + ", Format = " + rawResult.getBarcodeFormat()
             .toString(), Toast.LENGTH_LONG).show();
-    Intent intent =  new Intent(BARCODE_SCANNED);
-    intent.putExtra(BARCODE_DATA,rawResult.getText());
+    Intent intent = new Intent(BARCODE_SCANNED);
+    intent.putExtra(BARCODE_DATA, rawResult.getText());
     getActivity().sendBroadcast(intent);
     dismiss();
   }

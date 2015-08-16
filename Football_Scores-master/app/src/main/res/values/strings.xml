@@ -23,7 +23,7 @@
     <string name="about">About</string>
     <string name="title_activity_about">AboutActivity</string>
     <string name="about_text">
-        This Application get Football Matches Score for the Premier League,Seria A,Bundesliga,Primera Division
+        This Application get Football Matches Score for the Premier League,Seria A,Bundesliga,Primera Division,Leauge 1
         and the Uefa Champions League.
         All Matches data are acquired from football-data.org free API.
         All team Logos are acquired from http://hdlogo.wordpress.com/ upon requesting permission form the owner.

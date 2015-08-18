@@ -48,4 +48,6 @@
   <string name="widget_title">Football Scores</string>
   <string name="home_icon">Home Icon</string>
   <string name="away_icon">Away Icon</string>
+  <string name="league1">League 1</string>
+  <string name="no_known_league">Not known League Please report</string>
 </resources>

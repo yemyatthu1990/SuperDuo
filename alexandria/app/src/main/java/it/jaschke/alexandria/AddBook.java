@@ -160,13 +160,16 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
       ((TextView) rootView.findViewById(R.id.authors)).setText(authors.replace(",", "\n"));
     }
     String imgUrl = data.getString(data.getColumnIndex(AlexandriaContract.BookEntry.IMAGE_URL));
-    if (imgUrl != null && imgUrl.length() > 0) {
+    if (imgUrl != null && imgUrl.length() >0) {
       if (Patterns.WEB_URL.matcher(imgUrl).matches()) {
-        Glide.with(getActivity())
-            .load(imgUrl)
-            .centerCrop()
-            .into((ImageView) rootView.findViewById(R.id.bookCover));
-        rootView.findViewById(R.id.bookCover).setVisibility(View.VISIBLE);
+        //Fix glide crashing because of fragment not attaching to activity
+        if(getActivity()!=null && !getActivity().isFinishing()) {
+          Glide.with(this)
+              .load(imgUrl)
+              .centerCrop()
+              .into((ImageView) rootView.findViewById(R.id.bookCover));
+          rootView.findViewById(R.id.bookCover).setVisibility(View.VISIBLE);
+        }
       }
     }
     String categories =

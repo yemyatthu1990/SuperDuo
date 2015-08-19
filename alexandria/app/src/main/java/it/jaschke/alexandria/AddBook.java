@@ -22,7 +22,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import it.jaschke.alexandria.data.AlexandriaContract;
 import it.jaschke.alexandria.services.BookService;
@@ -56,11 +55,6 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
     setRetainInstance(true);
     rootView = inflater.inflate(R.layout.fragment_add_book, container, false);
     ean = (EditText) rootView.findViewById(R.id.ean);
-    if (savedInstanceState != null && savedInstanceState.getString(EAN_CONTENT) != null) {
-      Toast.makeText(getActivity(), savedInstanceState.getString(EAN_CONTENT), Toast.LENGTH_LONG)
-          .show();
-      ean.setText(savedInstanceState.getString(EAN_CONTENT));
-    }
     ean.addTextChangedListener(new TextWatcher() {
       @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {
         //no need
@@ -73,13 +67,25 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
       @Override public void afterTextChanged(Editable s) {
         String ean = s.toString();
         //catch isbn10 numbers
-        if (ean.length() == 10 && !ean.startsWith("978")) {
-          ean = "978" + ean;
+        if(ean.length()<13) {
+
+          if (ean.length() == 10 && !ean.startsWith("978")) {
+            ean = "978" + ean;
+          } else {
+            return;
+          }
         }
-        if (ean.length() < 13) {
-          clearFields();
-          return;
-        }
+
+
+        /**
+         * Comment out the following lines so user inputting accidentally will not reset
+         * the fields
+         */
+        //if (ean.length() < 13) {
+        //  clearFields();
+        //  return;
+        //}
+
         //Once we have an ISBN, start a book intent
         Intent bookIntent = new Intent(getActivity(), BookService.class);
         bookIntent.putExtra(BookService.EAN, ean);
@@ -107,6 +113,7 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
     rootView.findViewById(R.id.save_button).setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
         ean.setText("");
+        clearFields();
       }
     });
 
@@ -117,9 +124,12 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
         bookIntent.setAction(BookService.DELETE_BOOK);
         getActivity().startService(bookIntent);
         ean.setText("");
+        clearFields();
       }
     });
-
+    if (savedInstanceState != null && savedInstanceState.getString(EAN_CONTENT) != null) {
+      ean.setText(savedInstanceState.getString(EAN_CONTENT));
+    }
     return rootView;
   }
 
@@ -128,9 +138,6 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
   }
 
   @Override public android.support.v4.content.Loader<Cursor> onCreateLoader(int id, Bundle args) {
-    if (ean.getText().length() == 0) {
-      return null;
-    }
     String eanStr = ean.getText().toString();
     if (eanStr.length() == 10 && !eanStr.startsWith("978")) {
       eanStr = "978" + eanStr;
@@ -147,12 +154,15 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
     }
 
     String bookTitle = data.getString(data.getColumnIndex(AlexandriaContract.BookEntry.TITLE));
+    if(bookTitle!=null && bookTitle.length() >0){
     ((TextView) rootView.findViewById(R.id.bookTitle)).setText(bookTitle);
+    }
 
     String bookSubTitle =
         data.getString(data.getColumnIndex(AlexandriaContract.BookEntry.SUBTITLE));
-    ((TextView) rootView.findViewById(R.id.bookSubTitle)).setText(bookSubTitle);
-
+    if(bookSubTitle!=null && bookSubTitle.length() >0) {
+      ((TextView) rootView.findViewById(R.id.bookSubTitle)).setText(bookSubTitle);
+    }
     String authors = data.getString(data.getColumnIndex(AlexandriaContract.AuthorEntry.AUTHOR));
     if (authors != null && authors.length() > 0) {
       String[] authorsArr = authors.split(",");
@@ -189,9 +199,9 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
     ((TextView) rootView.findViewById(R.id.bookTitle)).setText("");
     ((TextView) rootView.findViewById(R.id.bookSubTitle)).setText("");
     ((TextView) rootView.findViewById(R.id.authors)).setText("");
+    rootView.findViewById(R.id.save_button).setVisibility(View.INVISIBLE);
     ((TextView) rootView.findViewById(R.id.categories)).setText("");
     rootView.findViewById(R.id.bookCover).setVisibility(View.INVISIBLE);
-    rootView.findViewById(R.id.save_button).setVisibility(View.INVISIBLE);
     rootView.findViewById(R.id.delete_button).setVisibility(View.INVISIBLE);
   }
 
